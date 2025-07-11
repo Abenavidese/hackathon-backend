@@ -3,6 +3,22 @@
 Este prototípo tiene como objetivo servir un backend para la integracion de agentes de IA como pluggin a la plataforma de moodle
 ---
 
+
+Este proyecto, desarrollado para la Hackathon 2025, es un prototipo funcional de un backend que potencia un plugin de Moodle para la enseñanza del idioma francés. La solución utiliza un ecosistema de agentes de IA para crear, evaluar y complementar ejercicios de aprendizaje de forma automática e inteligente.
+
+El sistema es capaz de generar ejercicios visuales pidiendo al estudiante que describa una imagen, para luego usar un modelo de lenguaje avanzado para evaluar la respuesta en términos de coherencia gramatical y contextual, ofreciendo retroalimentación instantánea y personalizada.
+
+## Funcionalidades Principales
+Este backend ofrece una API con cuatro funcionalidades clave diseñadas para integrarse con Moodle:
+
+Generación de Ejercicios (/exercise/new): Selecciona una imagen aleatoria del sistema y utiliza el modelo BLIP-2 para generar una descripción de referencia en francés. Esto crea la base para un ejercicio de "describe la imagen".
+
+Evaluación Inteligente (/evaluate): Recibe la descripción del estudiante y la compara con el texto de referencia usando GPT-4. Proporciona una calificación ("Correcto" o "Incorrecto"), feedback constructivo y una versión corregida del texto.
+
+Creación de Cuestionarios (/quiz/generate): A partir de la descripción de una imagen, utiliza GPT-4o-mini para generar automáticamente un cuestionario de 4 preguntas en formato GIFT, listo para ser importado en Moodle.
+
+
+
 ## 📂 Estructura del Proyecto
 
 ```text
