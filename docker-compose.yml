@@ -1,0 +1,70 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+# Define los servicios (contenedores) que compondrán la aplicación.
+services:
+  # Define el servicio de la base de datos MariaDB.
+  mariadb:
+    # Especifica la imagen de Docker a utilizar: la versión más reciente de MariaDB de Bitnami.
+    image: docker.io/bitnami/mariadb:latest
+    # Define las variables de entorno para configurar el contenedor de MariaDB.
+    environment:
+      # Permite que la base de datos se inicie sin una contraseña de root.
+      # Recomendado solo para entornos de desarrollo.
+      - ALLOW_EMPTY_PASSWORD=yes
+      # Crea un usuario específico para Moodle llamado 'bn_moodle'.
+      - MARIADB_USER=bn_moodle
+      # Crea una base de datos llamada 'bitnami_moodle' para que la use la aplicación.
+      - MARIADB_DATABASE=bitnami_moodle
+      # Establece el juego de caracteres por defecto a utf8mb4 para soportar caracteres especiales y emojis.
+      - MARIADB_CHARACTER_SET=utf8mb4
+      # Establece la colación (reglas de ordenación de caracteres) a utf8mb4_unicode_ci.
+      - MARIADB_COLLATE=utf8mb4_unicode_ci
+    # Define los volúmenes para la persistencia de datos.
+    volumes:
+      # Mapea un volumen nombrado 'mariadb_data' al directorio de datos de MariaDB dentro del contenedor.
+      # Esto asegura que los datos de la base de datos no se pierdan si el contenedor se elimina.
+      - 'mariadb_data:/bitnami/mariadb'
+
+  # Define el servicio de la aplicación Moodle.
+  moodle:
+    # Especifica la imagen de Docker a utilizar: la versión 4.3 de Moodle de Bitnami.
+    image: docker.io/bitnami/moodle:4.3 # version 
+    # Mapea los puertos del host a los puertos del contenedor.
+    ports:
+      # Mapea el puerto 80 del host al puerto 8080 del contenedor (para tráfico HTTP).
+      - '80:8080' # <-- PUERTO
+      # Mapea el puerto 443 del host al puerto 8443 del contenedor (para tráfico HTTPS).
+      - '443:8443'
+    # Define las variables de entorno para configurar el contenedor de Moodle.
+    environment:
+      # Indica a Moodle el nombre del host de la base de datos (el servicio 'mariadb').
+      - MOODLE_DATABASE_HOST=mariadb
+      # El puerto en el que la base de datos está escuchando.
+      - MOODLE_DATABASE_PORT_NUMBER=3306
+      # El usuario de la base de datos que Moodle debe usar.
+      - MOODLE_DATABASE_USER=bn_moodle
+      # El nombre de la base de datos que Moodle debe usar.
+      - MOODLE_DATABASE_NAME=bitnami_moodle
+      # Informa a Moodle que la base de datos no requiere contraseña.
+      # Recomendado solo para entornos de desarrollo.
+      - ALLOW_EMPTY_PASSWORD=yes
+    # Define los volúmenes para persistencia de datos y código.
+    volumes:
+      # Mapea la carpeta local './moodle' al directorio del código de Moodle en el contenedor.
+      # Permite el desarrollo en vivo sobre los archivos de Moodle desde la máquina local.
+      - './moodle:/bitnami/moodle'
+      # Mapea la carpeta local './moodledata' al directorio de datos de Moodle (archivos subidos, etc.).
+      # Es crucial para que los datos de los cursos persistan.
+      - './moodledata:/bitnami/moodledata'
+    # Establece las dependencias entre servicios.
+    depends_on:
+      # Asegura que el servicio 'mariadb' se inicie antes que el servicio 'moodle'.
+      - mariadb
+
+# Define los volúmenes nombrados utilizados en los servicios.
+volumes:
+  # Declara el volumen 'mariadb_data'.
+  mariadb_data:
+    # Especifica que Docker gestionará este volumen usando el driver por defecto ('local').
+    driver: local

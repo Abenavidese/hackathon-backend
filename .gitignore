@@ -1,0 +1,44 @@
+# Ignorar el entorno virtual
+venv/
+venv-hack/
+
+# Ignorar archivos de configuración de entornos virtuales de otros editores
+*.venv/
+
+# Ignorar archivos de configuración de editor
+.idea/
+.vscode/
+
+# Ignorar archivos de configuración de Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.pdb
+
+# Ignorar archivos de configuración de herramientas de caché
+*.log
+
+# Ignorar archivos de configuración locales
+.env
+
+# Ignorar directorios de caché
+__pycache__/
+
+# Ignorar carpetas de dependencias de Python
+*.egg-info/
+dist/
+build/
+*.tgz
+*.tar.gz
+
+# No subir archivos de bases de datos locales
+*.db
+
+# Otros archivos o carpetas que no quieres subir
+*.DS_Store  # Para sistemas macOS
+
+# no subir modelo ni carpetas de moodle
+model
+moodle
+moodledata
